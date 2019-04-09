@@ -104,7 +104,7 @@ for input_example_batch, target_example_batch in dataset.take(1):
 model.summary()
 def loss(labels, logits):
   return tf.keras.losses.sparse_categorical_crossentropy(labels, logits, from_logits=True)
-
+new_model = tf.keras.models.load_model('/home/q/Downloads/AIcode-master/05Sequences/myrnn.h5')
 example_batch_loss  = loss(target_example_batch, example_batch_predictions)
 print("Prediction shape: ", example_batch_predictions.shape, " # (batch_size, sequence_length, vocab_size)") 
 print("scalar_loss:      ", example_batch_loss.numpy().mean())
@@ -119,7 +119,17 @@ checkpoint_callback=tf.keras.callbacks.ModelCheckpoint(
     filepath=checkpoint_prefix,
     save_weights_only=True)
 EPOCHS=3
-#history = model.fit(dataset.repeat(), epochs=EPOCHS, #steps_per_epoch=steps_per_epoch, callbacks=[checkpoint_callback])
+#history = model.fit(dataset.repeat(), epochs=EPOCHS, steps_per_epoch=steps_per_epoch, callbacks=[checkpoint_callback])
+#model.save('myrnn.h5')#save model
+tf.train.latest_checkpoint(checkpoint_dir)
+model = build_model(vocab_size, embedding_dim, rnn_units, batch_size=1)
+
+model.load_weights(tf.train.latest_checkpoint(checkpoint_dir))
+
+model.build(tf.TensorShape([1, None]))
+
+print('after reshape:\n',model.summary())
+new_model = tf.keras.models.load_model('/home/q/Downloads/AIcode-master/05Sequences/myrnn.h5')
 
 def generate_text(model, start_string):
   # Evaluation step (generating text using the learned model)
@@ -142,6 +152,7 @@ def generate_text(model, start_string):
   # Here batch size == 1
   model.reset_states()
   for i in range(num_generate):
+
       predictions = model(input_eval)
       # remove the batch dimension
       predictions = tf.squeeze(predictions, 0)
@@ -149,7 +160,9 @@ def generate_text(model, start_string):
       # using a multinomial distribution to predict the word returned by the model
       predictions = predictions / temperature
       predicted_id = tf.multinomial(predictions, num_samples=1)[-1,0].numpy()
-      
+      if(i<5):
+            print('in gen:\n',tf.shape(input_eval),'\n',input_eval.numpy())
+
       # We pass the predicted word as the next input to the model
       # along with the previous hidden state
       input_eval = tf.expand_dims([predicted_id], 0)
@@ -158,6 +171,6 @@ def generate_text(model, start_string):
 
   return (start_string + ''.join(text_generated))
 
-
-
+#tf.train.latest_checkpoint(checkpoint_dir)
+print(generate_text(model, start_string=u"ROMEO: "))
 
