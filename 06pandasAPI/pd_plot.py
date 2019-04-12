@@ -1,5 +1,11 @@
 import pandas as pd
 import matplotlib.pyplot as plt 
+'''
+粗略统计二胎年龄差距
+se 为1 主申请人，多数为爸爸
+se为2共同申请人，多为妈妈和孩子
+se为0，others
+'''
 #difage = []
 class family:
 	def __init__(self):
@@ -33,40 +39,4 @@ if __name__ == '__main__':
 	a = pd.Series(myf.diff)
 	a.plot.hist(bins =19 )
 	plt.show()
-
-	'''
-	#
-	b.shape
-
-	#行访问
-	b.iloc[0]   
-
-	#加一行
-	b.loc[9]=b.loc[3]
-
-	#减一行
-	b.drop(4)
-
-	#列访问
-	b['name']
-
-	#加一列
-	b['nid']=None
-
-	#减一列
-	del b['nid']
-	#提取年月日
-	b['year']=b['id'].str[6:10]
-	b['mon']=b['id'].str[10:12]
-	b['day']=b['id'].str[12:14]
-	#修改类型
-	b['mon']=pd.to_numeric(b['id'].str[6:10])
-	'''
-
-	
-
-
-
-
-
 
