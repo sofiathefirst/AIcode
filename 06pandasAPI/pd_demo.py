@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import pandas as pd
 
 b= pd.read_csv('b.csv', sep=',',dtype={'id':str})

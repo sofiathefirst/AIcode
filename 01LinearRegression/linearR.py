@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 # -*- coding:UTF-8 -*-
 import numpy as np
 np.random.seed(1337)  # for reproducibility
@@ -30,6 +30,3 @@ Ye = model.predict(Xe)
 
 plt.plot(X_train, Y_train,'.',Xe,Ye,'.')
 plt.show()
-
-
-
